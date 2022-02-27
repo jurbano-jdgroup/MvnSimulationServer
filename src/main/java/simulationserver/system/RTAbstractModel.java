@@ -8,7 +8,7 @@ package simulationserver.system;
 
 public abstract class RTAbstractModel implements RTModelInterface {
     /** initial input buffer size */
-    public static int INITIAL_INPUT_BUFFER_SIZE = 4096;
+    public static int INITIAL_INPUT_BUFFER_SIZE = 12800000;
     /* step size vars */
     protected double step_size;
     protected double max_step_size;
