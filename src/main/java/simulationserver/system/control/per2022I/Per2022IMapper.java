@@ -40,21 +40,25 @@ public class Per2022IMapper{
     public RTAbstractModel loadP5() {
         BaseMatrix num = new BaseMatrix(4,1);
         BaseMatrix den = new BaseMatrix(4,1);
-        
+
         num.fill(0.0);
         num.set(3, 0, 6.0);
         num.set(2, 0, 3.04);
         num.set(1, 0, 1.0);
-        
+
         den.set(0, 0, 1.0);
         den.set(1, 0, 1.04);
         den.set(2, 0, 3.04);
         den.set(3, 0, 3.0);
-        
+
         simulationserver.system.System system = null;
-        
+
         try {
             system = new simulationserver.system.System(num, den);
+            system.setMaxDeadZoneValue(1.0);
+            system.setMinDeadZoneValue(-1.0);
+            system.setMaxInputValue(10.0);
+            system.setMinInputValue(-10.0);
         }catch (Exception ex) {
             System.out.println("Error creating the system P5: " + ex.getMessage());
         }
