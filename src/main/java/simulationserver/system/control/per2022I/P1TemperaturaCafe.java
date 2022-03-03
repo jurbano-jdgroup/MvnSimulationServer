@@ -21,7 +21,7 @@ public class P1TemperaturaCafe extends SecondOrderSystem {
         this.maxDeadZoneValue = 1.0;
         this.minInputValue = -10.0;
         this.maxInputValue = 10.0;
-        this.delay_time = 20.0;
+        //this.delay_time = 20.0;
     }
     
     @Override
