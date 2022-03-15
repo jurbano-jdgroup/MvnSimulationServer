@@ -12,6 +12,8 @@ public interface Matrix<T> {
     T get(int row, int col);
     void set(int row, int col, T value);
     Matrix<T> dot(Matrix<T> vector);
+    Matrix<T> getRow(int row);
+    Matrix<T> getCol(int col);
     void selfAdd(Matrix<T> matrix);
     void selfAdd(T value);
     void selfSubs(Matrix<T> matrix);

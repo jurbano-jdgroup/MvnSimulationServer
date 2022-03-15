@@ -105,7 +105,7 @@ public class BaseMatrix implements Matrix<Number> {
     @Override
     public Number get(int row, int col) {
         if(row>=rows || col>=cols) {
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, get");
         }
         
         return data[row*cols + col];
@@ -120,7 +120,8 @@ public class BaseMatrix implements Matrix<Number> {
     @Override
     public void set(int row, int col, Number value) {
         if(row>=rows || col>=cols) {
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, set("+row+", "+col+")"+
+                    ", to matrix with dims: ("+rows+","+cols+")");
         }
         
         data[row*cols + col] = value;
@@ -135,7 +136,7 @@ public class BaseMatrix implements Matrix<Number> {
     public Matrix dot(Matrix vector) {
         // dot only if this is a vector
         if(cols!=1) {
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, dot");
         }
         
         return this.multiply(vector);
@@ -149,7 +150,7 @@ public class BaseMatrix implements Matrix<Number> {
     public void selfAdd(Matrix<Number> matrix) {
         // check the matrix
         if(matrix.cols()!=cols || matrix.rows()!=rows){
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, selfAdd");
         }
         
         for(int i=0; i<rows; ++i) {
@@ -182,7 +183,7 @@ public class BaseMatrix implements Matrix<Number> {
     public void selfSubs(Matrix<Number> matrix) {
         // check the matrix
         if(matrix.cols()!=cols || matrix.rows()!=rows){
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, selfSubs");
         }
         
         for(int i=0; i<rows; ++i) {
@@ -231,7 +232,7 @@ public class BaseMatrix implements Matrix<Number> {
     public Matrix<Number> add(Matrix<Number> matrix) {
         // check the matrix
         if(matrix.cols()!=cols || matrix.rows()!=rows) {
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, add");
         }
         
         Matrix ret = new BaseMatrix(rows, cols);
@@ -255,7 +256,7 @@ public class BaseMatrix implements Matrix<Number> {
     public Matrix<Number> subs(Matrix<Number> matrix) {
         // check the matrix
         if(matrix.cols()!=cols || matrix.rows()!=rows) {
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, subs");
         }
         
         Matrix ret = new BaseMatrix(rows, cols);
@@ -279,7 +280,7 @@ public class BaseMatrix implements Matrix<Number> {
     public Matrix<Number> multiply(Matrix<Number> matrix) {
         // check the matrix
         if(matrix.rows()!=cols) {
-            throw new java.lang.ArrayIndexOutOfBoundsException();
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, multiply");
         }
         
         Matrix ret = new BaseMatrix(rows, matrix.cols());
@@ -342,5 +343,35 @@ public class BaseMatrix implements Matrix<Number> {
     public void dump() {
         final String ret = this.toString();
         System.out.println(ret);
+    }
+
+    @Override
+    public Matrix<Number> getRow(int row) {
+        if (row >= rows) {
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, getRow");
+        }
+        
+        Matrix ret = new BaseMatrix(1, cols);
+        
+        for(int i=0; i<cols; ++i) {
+            ret.set(0, i, (double) this.get(row, i));
+        }
+        
+        return ret;
+    }
+
+    @Override
+    public Matrix<Number> getCol(int col) {
+        if (col >= cols) {
+            throw new java.lang.ArrayIndexOutOfBoundsException("Matrix, getCol");
+        }
+
+        Matrix ret = new BaseMatrix(rows, 1);
+        
+        for(int i=0; i<rows; ++i) {
+            ret.set(i, 0, (double) this.get(i, col));
+        }
+        
+        return ret;
     }
 }

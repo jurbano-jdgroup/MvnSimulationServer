@@ -234,4 +234,9 @@ public class System extends RTAbstractModel implements StateSpace  {
     public void setDen(Matrix<Number> den) {
         
     }
+
+    @Override
+    public Matrix<Number> getStates() {
+        return this.states;
+    }
 }

@@ -12,6 +12,7 @@ public interface StateSpace extends TransferFunction {
     Matrix<Number> getB();
     Matrix<Number> getC();
     Matrix<Number> getD();
+    Matrix<Number> getStates();
     void setA(Matrix<Number> matrix);
     void setB(Matrix<Number> matrix);
     void setC(Matrix<Number> matrix);
