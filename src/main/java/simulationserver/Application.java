@@ -22,6 +22,7 @@ public class Application {
             this.simulationServer.setConfig(request.getConfig());
             this.simulationServer.runService();
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.out.println("Error parsing commands: " + ex.getMessage());
             System.exit(0);
         }

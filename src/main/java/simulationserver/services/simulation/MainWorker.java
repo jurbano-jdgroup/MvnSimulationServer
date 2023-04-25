@@ -5,11 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import simulationserver.RuntimeConfiguration;
-import simulationserver.services.simulation.initializer.SecondOrderSystemInitializer;
-import simulationserver.services.simulation.initializer.InitializerService;
-import simulationserver.services.simulation.initializer.PidController;
-import simulationserver.services.simulation.initializer.PidInitializer;
-import simulationserver.services.simulation.initializer.ServerInitializer;
+import simulationserver.services.simulation.initializer.*;
 import simulationserver.system.RTAbstractModel;
 
 /**
@@ -22,12 +18,15 @@ public class MainWorker extends ThreadWorkerAbstract {
     @Autowired InitializerService initializerService;
     
     private final Server server = new Server();
+    private final simulationserver.services.simulation.initializer.FirstOrderSystem firstOrderInit = new
+            simulationserver.services.simulation.initializer.FirstOrderSystem();
     private final simulationserver.services.simulation.initializer.SecondOrderSystem secOrderInit = new 
             simulationserver.services.simulation.initializer.SecondOrderSystem();
     private final PidController pidControler = new PidController();
     
     public void addStarters() {
         this.initializerService.put(Server.class, new ServerInitializer());
+        this.initializerService.put(simulationserver.services.simulation.initializer.FirstOrderSystem.class, new FirstOrderSystemInitializer());
         this.initializerService.put(simulationserver.services.simulation.initializer.SecondOrderSystem.class, new SecondOrderSystemInitializer());
         this.initializerService.put(PidController.class, new PidInitializer());
     }
@@ -38,6 +37,7 @@ public class MainWorker extends ThreadWorkerAbstract {
             
             // init server
             this.initializerService.get(Server.class).init(this.server, params);
+            this.initializerService.get(simulationserver.services.simulation.initializer.FirstOrderSystem.class).init(firstOrderInit, params);
             this.initializerService.get(simulationserver.services.simulation.initializer.SecondOrderSystem.class).init(secOrderInit, params);
             this.initializerService.get(PidController.class).init(this.pidControler, params);
             
@@ -47,8 +47,11 @@ public class MainWorker extends ThreadWorkerAbstract {
             if (params.containsKey("system")) {
                 final String systemValue = (String) params.get("system");
                 RTAbstractModel system = (RTAbstractModel) this.context.getBean(systemValue);
-                
-                if (systemValue.compareToIgnoreCase("secondorder") == 0) 
+
+                if (systemValue.compareToIgnoreCase("firstorder") == 0) {
+                    this.initFirstOrderSystem((simulationserver.system.control.FirstOrderSystem) system);
+                }
+                else if (systemValue.compareToIgnoreCase("secondorder") == 0)
                 {
                     this.initSecondOrderSystem((simulationserver.system.control.SecondOrderSystem) system);
                 }
@@ -61,6 +64,18 @@ public class MainWorker extends ThreadWorkerAbstract {
                 }
             }
         }
+    }
+
+    private void initFirstOrderSystem(simulationserver.system.control.FirstOrderSystem system) {
+        system.s_k = this.firstOrderInit.getS_k();
+        system.s_a = this.firstOrderInit.getS_a();
+        system.s_b = this.firstOrderInit.getS_b();
+        system.s_c = this.firstOrderInit.getS_c();
+        system.s_t = this.firstOrderInit.getS_t();
+        system.setDelayTime(this.firstOrderInit.getS_t());
+        system.setStepSize(this.firstOrderInit.getStepSize());
+
+        this.server.setModel(system);
     }
     
     private void initSecondOrderSystem(simulationserver.system.control.SecondOrderSystem system) {

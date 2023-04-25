@@ -21,7 +21,7 @@ public class Request {
     
     public RuntimeConfiguration getConfig() throws Exception {
         if (this.config == null)
-            throw new Exception("The config object is not setted");
+            throw new Exception("The config object is not set");
         
         return this.config;
     }

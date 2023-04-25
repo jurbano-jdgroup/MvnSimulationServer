@@ -7,7 +7,7 @@ package simulationserver;
  */
 public class RuntimeConfiguration {
     
-    public static final String UNSIGNER_INT_TYPE = "[0-9]+";
+    public static final String UNSIGNED_INT_TYPE = "[0-9]+";
     public static final String SIGNED_FLOAT = "[+\\-]?[0-9]*\\.?[0-9]+";
     public static final String UNSIGNED_FLOAT = "\\+?[0-9]*\\.?[0-9]+";
     public static final String TEXT_TYPE = "[a-zA-Z0-9]+";
@@ -19,16 +19,16 @@ public class RuntimeConfiguration {
      * 1st: name, 2nd: has value, 3rd: is required, 4th: description, 5th: type
      */
     protected final Object[][] options = {
-        {"port", true, false, "Puerto del servidor, por defecto 10080", RuntimeConfiguration.UNSIGNER_INT_TYPE},
-        {"maxconnections", true, false, "Maximo numero de conexiones, por defecto 5", RuntimeConfiguration.UNSIGNER_INT_TYPE},
-        {"inputsampling", true, false, "e.g: 10, 5, 200... Muestreo de entrada, por defecto 10 ms", RuntimeConfiguration.UNSIGNER_INT_TYPE},
-        {"outputsampling", true, false, "Muestreo de salida, por defecto 1 ms", RuntimeConfiguration.UNSIGNER_INT_TYPE},
+        {"port", true, false, "Puerto del servidor, por defecto 10080", RuntimeConfiguration.UNSIGNED_INT_TYPE},
+        {"maxconnections", true, false, "Maximo numero de conexiones, por defecto 5", RuntimeConfiguration.UNSIGNED_INT_TYPE},
+        {"inputsampling", true, false, "e.g: 10, 5, 200... Muestreo de entrada, por defecto 10 ms", RuntimeConfiguration.UNSIGNED_INT_TYPE},
+        {"outputsampling", true, false, "Muestreo de salida, por defecto 1 ms", RuntimeConfiguration.UNSIGNED_INT_TYPE},
         {"service", true, false, "Servicio", RuntimeConfiguration.TEXT_TYPE},
         {"system", true, false, "Obligatorio. Dinamica, puede ser: [firstorder] para un sistema de primer orden,"+
             " [secondorder] para un sistema de segundo order, [pid] para un controlador, "+
             "[thirdorder] para un sistema de tercer order predefinido, [freqres] o [planta1], [planta2], "+
             "[planta3], [planta4] para usar las dinámicas predefinidas", RuntimeConfiguration.TEXT_TYPE},
-        {"group", true, false, "Grupo de trabajo: 1, 2, 3, ...", RuntimeConfiguration.UNSIGNER_INT_TYPE},
+        {"group", true, false, "Grupo de trabajo: 1, 2, 3, ...", RuntimeConfiguration.UNSIGNED_INT_TYPE},
         {"k", true, false, "e.g -1.3, 4.5, 100.444... Parámetro de la función de transferencia, por defecto 1.0.", RuntimeConfiguration.SIGNED_FLOAT},
         {"a", true, false, "e.g -1.3, 4.5, 100.444... Parámetro de la función de transferencia, por defecto 0.0.", RuntimeConfiguration.SIGNED_FLOAT},
         {"b", true, false, "e.g -1.3, 4.5, 100.444... Parámetro de la función de transferencia, por defecto 1.0.", RuntimeConfiguration.UNSIGNED_FLOAT},
@@ -102,7 +102,7 @@ public class RuntimeConfiguration {
                         final String value = matcher.replaceAll("$2");
                         Object finalValue;
                         // check if unsigned integer type
-                        if (optionItem[4]==RuntimeConfiguration.UNSIGNER_INT_TYPE) {
+                        if (optionItem[4]==RuntimeConfiguration.UNSIGNED_INT_TYPE) {
                             finalValue = Integer.parseUnsignedInt(value);
                         } else if (optionItem[4] == RuntimeConfiguration.TEXT_TYPE) {
                             finalValue = value;
@@ -120,7 +120,7 @@ public class RuntimeConfiguration {
                         }
                         
                         if(deb && ((Boolean)optionItem[1])) System.out.println("Param "+
-                                optionItem[0]+" setted to "+value+", on arg item: "+argItem);
+                                optionItem[0]+" set to "+value+", on arg item: "+argItem);
                         
                         this.paramsRecovered.put((String)optionItem[0], finalValue);
                         foundFlag = true;
@@ -175,7 +175,7 @@ public class RuntimeConfiguration {
             System.out.println("\nOptions list:");
             while (it.hasNext()) {
                 final String key = (String) it.next();
-                System.out.println("Option: "+key+" setted to value: "+this.paramsRecovered.get(key));
+                System.out.println("Option: "+key+" set to value: "+this.paramsRecovered.get(key));
             }
             System.out.println();
         } else {
